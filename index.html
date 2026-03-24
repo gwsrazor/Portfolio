@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nicolas Bousset — Senior UI Designer</title>
+  <meta name="description" content="Portfolio of Nicolas Bousset, Senior UI Designer specializing in design systems, product design, and creative direction.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════════════════ */
+    :root {
+      --bg: #0A0A0A;
+      --bg-elevated: #111111;
+      --bg-card: #161616;
+      --cream: #E8DCC8;
+      --cream-muted: #C4B8A5;
+      --vermillion: #E63946;
+      --text-primary: #F0ECE6;
+      --text-secondary: #8A8580;
+      --text-muted: #857F79;
+      --border: #222222;
+      --border-light: #1A1A1A;
+
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Manrope', sans-serif;
+      --font-accent: 'Instrument Serif', serif;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+      --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 4rem;
+      --space-2xl: 6rem;
+      --space-3xl: 10rem;
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html { scroll-behavior: auto; }
+    }
+
+    ::selection {
+      background: var(--vermillion);
+      color: var(--bg);
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; cursor: none; }
+
+    /* ═══════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════ */
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid var(--cream);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s var(--ease-out-expo),
+                  height 0.3s var(--ease-out-expo),
+                  border-color 0.3s ease,
+                  background 0.3s ease;
+      mix-blend-mode: difference;
+    }
+
+    .cursor.hovering {
+      width: 60px;
+      height: 60px;
+      background: var(--cream);
+      border-color: var(--cream);
+    }
+
+    .cursor-dot {
+      position: fixed;
+      width: 5px;
+      height: 5px;
+      background: var(--cream);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 10000;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: difference;
+    }
+
+    @media (pointer: coarse) {
+      .cursor, .cursor-dot { display: none; }
+      body { cursor: auto; }
+      a, button { cursor: pointer; }
+    }
+
+    /* ═══════════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════════ */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 clamp(1.5rem, 4vw, 4rem);
+    }
+
+    /* ═══════════════════════════════════════════════
+       GRAIN OVERLAY
+    ═══════════════════════════════════════════════ */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAVIGATION
+    ═══════════════════════════════════════════════ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: var(--space-md) 0;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--vermillion);
+      transition: width 0.4s var(--ease-out-expo);
+    }
+
+    .nav-links a:hover { color: var(--text-primary); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-links a:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 4px; }
+
+    .nav-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      width: 44px;
+      height: 44px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-menu-btn span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--cream);
+      transition: transform 0.3s var(--ease-out-expo), opacity 0.3s ease;
+    }
+
+    /* ═══════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════ */
+    .hero {
+      display: flex;
+      align-items: flex-start;
+      padding-top: 7rem;
+      padding-bottom: var(--space-xl);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-line {
+      position: absolute;
+      height: 1px;
+      background: var(--border);
+      left: 0;
+      right: 0;
+    }
+
+    .hero-bg-line:nth-child(1) { top: 25%; }
+    .hero-bg-line:nth-child(2) { top: 50%; }
+    .hero-bg-line:nth-child(3) { top: 75%; }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--vermillion);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s var(--ease-out-expo) 0.2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 1px;
+      background: var(--vermillion);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 9vw, 9rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      color: var(--cream);
+      margin-bottom: var(--space-xl);
+    }
+
+    .hero-title .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero-title .line span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(100%);
+      animation: slideUp 1s var(--ease-out-expo) forwards;
+    }
+
+    .hero-title .line:nth-child(1) span { animation-delay: 0.3s; }
+    .hero-title .line:nth-child(2) span { animation-delay: 0.45s; }
+    .hero-title .line:nth-child(3) span { animation-delay: 0.6s; }
+
+    .hero-title .accent {
+      font-family: var(--font-accent);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-lg);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 0.8s var(--ease-out-expo) 0.9s forwards;
+    }
+
+    .hero-description {
+      max-width: 420px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    .hero-scroll-cta {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--vermillion);
+      animation: scrollDown 2s ease-in-out infinite;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SECTION HEADERS
+    ═══════════════════════════════════════════════ */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-number {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--vermillion);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--cream);
+    }
+
+    .section-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════
+       WORK / PROJECTS
+    ═══════════════════════════════════════════════ */
+    .work {
+      padding: var(--space-xl) 0;
+    }
+
+    .project-grid {
+      display: grid;
+      gap: var(--space-sm);
+    }
+
+    .project-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      background: var(--bg-card);
+      transition: transform 0.6s var(--ease-out-expo);
+    }
+
+    .project-item:hover {
+      transform: scale(0.985);
+    }
+
+    .project-link {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-link:focus-visible {
+      outline: 2px solid var(--vermillion);
+      outline-offset: 2px;
+    }
+
+    .project-image {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-elevated);
+    }
+
+    .project-image-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.8s var(--ease-out-expo);
+    }
+
+    .project-item:hover .project-image-inner {
+      transform: scale(1.05);
+    }
+
+    /* Placeholder project visuals */
+    .project-visual {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .pv-1 {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .pv-1::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border: 2px solid rgba(232, 220, 200, 0.15);
+      border-radius: 50%;
+    }
+    .pv-1::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) rotate(45deg);
+      width: 140px;
+      height: 140px;
+      border: 1px solid rgba(230, 57, 70, 0.3);
+    }
+
+    .pv-2 {
+      background: linear-gradient(160deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+    }
+    .pv-2::after {
+      content: '';
+      position: absolute;
+      bottom: 30%;
+      right: 15%;
+      width: 180px;
+      height: 3px;
+      background: rgba(232, 220, 200, 0.12);
+    }
+    .pv-2::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      width: 100px;
+      height: 100px;
+      background: rgba(230, 57, 70, 0.08);
+      border-radius: 50%;
+      filter: blur(30px);
+    }
+
+    .pv-3 {
+      background: linear-gradient(145deg, #1a1a1a 0%, #2d2d2d 60%, #1a1a1a 100%);
+    }
+    .pv-3::after {
+      content: '';
+      position: absolute;
+      top: 30%;
+      left: 20%;
+      width: 220px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(232, 220, 200, 0.2), transparent);
+    }
+    .pv-3::before {
+      content: '';
+      position: absolute;
+      bottom: 25%;
+      right: 20%;
+      width: 60px;
+      height: 60px;
+      border: 1px solid rgba(230, 57, 70, 0.2);
+      transform: rotate(15deg);
+    }
+
+    .pv-4 {
+      background: linear-gradient(170deg, #0a192f 0%, #112240 50%, #233554 100%);
+    }
+    .pv-4::after {
+      content: '';
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      background: radial-gradient(circle, rgba(230, 57, 70, 0.1) 0%, transparent 70%);
+    }
+    .pv-4::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 1px solid rgba(232, 220, 200, 0.1);
+    }
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: clamp(1.25rem, 3vw, 4rem);
+    }
+
+    .project-meta {
+      display: flex;
+      gap: var(--space-md);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .project-name {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      color: var(--cream);
+      margin-bottom: var(--space-sm);
+    }
+
+    .project-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      max-width: 380px;
+    }
+
+    .project-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-md);
+      margin-top: var(--space-md);
+    }
+
+    .project-tags {
+      display: flex;
+      gap: var(--space-xs);
+      flex-wrap: wrap;
+    }
+
+    .project-tag {
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      border-radius: 1px;
+      transition: border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .project-item:hover .project-tag {
+      border-color: var(--text-muted);
+      color: var(--text-primary);
+    }
+
+    .project-arrow {
+      width: 44px;
+      min-width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      transition: all 0.4s var(--ease-out-expo);
+    }
+
+    .project-arrow svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 1.5;
+      transition: stroke 0.3s ease, transform 0.4s var(--ease-out-expo);
+    }
+
+    .project-item:hover .project-arrow {
+      border-color: var(--vermillion);
+      background: var(--vermillion);
+    }
+
+    .project-item:hover .project-arrow svg {
+      stroke: var(--bg);
+      transform: translate(2px, -2px);
+    }
+
+    /* Alternate layout for even items */
+    .project-item:nth-child(even) .project-link {
+      direction: rtl;
+    }
+    .project-item:nth-child(even) .project-link > * {
+      direction: ltr;
+    }
+
+    /* ═══════════════════════════════════════════════
+       MARQUEE / SKILLS TICKER
+    ═══════════════════════════════════════════════ */
+    .marquee-section {
+      padding: var(--space-md) 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .marquee-track {
+      display: flex;
+      animation: marquee 30s linear infinite;
+      width: max-content;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    .marquee-item {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.5vw, 2rem);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text-muted);
+      white-space: nowrap;
+      padding: 0 var(--space-xl);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      transition: color 0.3s ease;
+    }
+
+    .marquee-item:hover {
+      color: var(--cream);
+    }
+
+    .marquee-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--vermillion);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════════════
+       ABOUT
+    ═══════════════════════════════════════════════ */
+    .about {
+      padding: var(--space-xl) 0;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3xl);
+      align-items: start;
+    }
+
+    .about-statement {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 600;
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+
+    .about-statement .highlight {
+      color: var(--vermillion);
+    }
+
+    .about-statement .serif-accent {
+      font-family: var(--font-accent);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .about-details {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
+
+    .about-bio {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--text-secondary);
+    }
+
+
+    /* ═══════════════════════════════════════════════
+       EXPERIENCE TIMELINE
+    ═══════════════════════════════════════════════ */
+    .experience {
+      padding: var(--space-xl) 0;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--space-xl);
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+      transition: background 0.3s ease;
+    }
+
+    .timeline-item:first-child {
+      border-top: none;
+    }
+
+    .timeline-item:last-child {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .timeline-year {
+      font-family: var(--font-display);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--vermillion);
+      padding-top: 4px;
+    }
+
+    .timeline-content {}
+
+    .timeline-role {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .timeline-company {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      max-width: 560px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       TESTIMONIALS
+    ═══════════════════════════════════════════════ */
+    .testimonials {
+      padding: var(--space-xl) 0;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-sm);
+    }
+
+    .testimonial-card {
+      background: var(--bg-card);
+      padding: var(--space-xl);
+      border-radius: 2px;
+      position: relative;
+      border: 1px solid var(--border-light);
+      transition: border-color 0.4s ease;
+    }
+
+    .testimonial-card:hover {
+      border-color: var(--border);
+    }
+
+    .testimonial-quote-mark {
+      font-family: var(--font-accent);
+      font-size: 4rem;
+      color: var(--vermillion);
+      line-height: 1;
+      margin-bottom: var(--space-sm);
+      opacity: 0.6;
+    }
+
+    .testimonial-text {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-lg);
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .testimonial-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--bg-elevated);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--cream);
+      border: 1px solid var(--border);
+    }
+
+    .testimonial-author-name {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .testimonial-author-role {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════════════════════════════════════════════
+       CONTACT / FOOTER
+    ═══════════════════════════════════════════════ */
+    .contact {
+      padding: var(--space-xl) 0;
+    }
+
+    .contact-inner {
+      text-align: center;
+    }
+
+    .contact-headline {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 7vw, 6rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--cream);
+      margin-bottom: var(--space-md);
+    }
+
+    .contact-headline .serif-accent {
+      font-family: var(--font-accent);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--text-secondary);
+    }
+
+    .contact-sub {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-xl);
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.7;
+    }
+
+    .contact-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--bg);
+      background: var(--cream);
+      padding: 18px 44px;
+      border: none;
+      border-radius: 1px;
+      transition: all 0.4s var(--ease-out-expo);
+      text-decoration: none;
+    }
+
+    .contact-cta:hover {
+      background: var(--vermillion);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .contact-cta:focus-visible {
+      outline: 2px solid var(--vermillion);
+      outline-offset: 4px;
+    }
+
+    .contact-cta svg {
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    .contact-cta:hover svg {
+      transform: translate(4px, -4px);
+    }
+
+    .footer {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+
+    .footer-links a {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.3s ease;
+    }
+
+    .footer-links a:hover { color: var(--cream); }
+    .footer-links a:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 4px; }
+
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL
+    ═══════════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s var(--ease-out-expo),
+                  transform 0.8s var(--ease-out-expo);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-stagger > * {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s var(--ease-out-expo),
+                  transform 0.7s var(--ease-out-expo);
+    }
+
+    .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+    .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.05s; }
+    .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.10s; }
+    .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.15s; }
+    .reveal-stagger.visible > *:nth-child(5) { transition-delay: 0.20s; }
+    .reveal-stagger.visible > *:nth-child(6) { transition-delay: 0.25s; }
+    .reveal-stagger.visible > *:nth-child(7) { transition-delay: 0.30s; }
+    .reveal-stagger.visible > *:nth-child(8) { transition-delay: 0.35s; }
+
+    .reveal-stagger.visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ═══════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════ */
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollDown {
+      0% { top: -100%; }
+      50% { top: 100%; }
+      100% { top: 100%; }
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-xl);
+      }
+
+      .testimonial-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-item {
+        grid-template-columns: 140px 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-menu-btn { display: flex; }
+
+      .project-link {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .project-image {
+        aspect-ratio: 16 / 10;
+      }
+
+      .project-item:nth-child(even) .project-link {
+        direction: ltr;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: var(--space-xs);
+      }
+
+      .hero {
+        align-items: center;
+        padding-bottom: var(--space-xl);
+      }
+
+      .hero-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .hero-scroll-cta { display: none; }
+
+      .footer-inner {
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .section-header {
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+    }
+
+    /* Touch devices: show project cards in hover state by default */
+    @media (pointer: coarse) {
+      .project-item .project-image-inner {
+        transform: scale(1.05);
+      }
+
+      .project-item .project-tag {
+        border-color: var(--text-muted);
+        color: var(--text-primary);
+      }
+
+      .project-item .project-arrow {
+        border-color: var(--vermillion);
+        background: var(--vermillion);
+      }
+
+      .project-item .project-arrow svg {
+        stroke: var(--bg);
+        transform: translate(2px, -2px);
+      }
+    }
+
+    /* ═══════════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════════ */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: var(--space-lg);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 3rem);
+      font-weight: 700;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-menu a:hover {
+      color: var(--vermillion);
+    }
+  </style>
+</head>
+<body>
+  <!-- Grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="#" class="nav-logo hoverable">NB.</a>
+      <ul class="nav-links">
+        <li><a href="#work" class="hoverable">Work</a></li>
+        <li><a href="#about" class="hoverable">About</a></li>
+        <li><a href="#experience" class="hoverable">Experience</a></li>
+        <li><a href="#contact" class="hoverable">Contact</a></li>
+      </ul>
+      <button class="nav-menu-btn hoverable" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile menu -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#work" class="hoverable">Work</a>
+    <a href="#about" class="hoverable">About</a>
+    <a href="#experience" class="hoverable">Experience</a>
+    <a href="#contact" class="hoverable">Contact</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <div class="hero-bg-line" aria-hidden="true"></div>
+    <div class="hero-bg-line" aria-hidden="true"></div>
+    <div class="hero-bg-line" aria-hidden="true"></div>
+    <div class="container hero-content">
+      <p class="hero-eyebrow">Senior UI Designer — Based in Paris</p>
+      <h1 class="hero-title">
+        <span class="line"><span>Crafting</span></span>
+        <span class="line"><span><em class="accent">interfaces</em> that</span></span>
+        <span class="line"><span>feel inevitable.</span></span>
+      </h1>
+      <div class="hero-bottom">
+        <p class="hero-description">
+          Senior UI Designer with 10+ years shaping digital products for clients across the sport and multimedia industries. I bridge the gap between aesthetics and usability to create experiences that truly resonate.
+        </p>
+        <div class="hero-scroll-cta" aria-hidden="true">
+          <span>Scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Marquee -->
+  <div class="marquee-section" aria-label="Skills and expertise">
+    <div class="marquee-track">
+      <span class="marquee-item hoverable">UI/UX Design <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Creative Direction <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Web/App Design <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Design Systems <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Prototyping <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Visual Identity <span class="marquee-dot" aria-hidden="true"></span></span>
+      <!-- Duplicate for seamless loop -->
+      <span class="marquee-item hoverable">UI/UX Design <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Creative Direction <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Web/App Design <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Design Systems <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Prototyping <span class="marquee-dot" aria-hidden="true"></span></span>
+      <span class="marquee-item hoverable">Visual Identity <span class="marquee-dot" aria-hidden="true"></span></span>
+    </div>
+  </div>
+
+  <!-- Work Section -->
+  <section class="work" id="work">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <span class="section-number">01</span>
+          <h2 class="section-title">Selected Work</h2>
+        </div>
+        <span class="section-subtitle">2015 — Present</span>
+      </div>
+
+      <div class="project-grid reveal-stagger">
+        <!-- 1. AC Milan 2026 -->
+        <article class="project-item">
+          <a href="project-ac-milan-2026.html" class="project-link hoverable" aria-label="View AC Milan 2026 project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-1"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2026</span>
+                  <span>Club</span>
+                </div>
+                <h3 class="project-name">AC Milan 2026</h3>
+                <p class="project-desc">Second digital transformation for AC Milan — redesigning the club's entire digital ecosystem across web and mobile platforms.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI Design</span>
+                  <span class="project-tag">Web</span>
+                  <span class="project-tag">Mobile</span>
+                  <span class="project-tag">Design System</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 2. beIN Sports -->
+        <article class="project-item">
+          <a href="project-bein-sports.html" class="project-link hoverable" aria-label="View beIN Sports project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-2"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2023</span>
+                  <span>Media</span>
+                </div>
+                <h3 class="project-name">beIN Sports</h3>
+                <p class="project-desc">Full redesign of beIN Sports News digital platforms — delivering a modern, content-first experience for one of the world's largest sports broadcasters.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI Design</span>
+                  <span class="project-tag">Web</span>
+                  <span class="project-tag">App</span>
+                  <span class="project-tag">Design System</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 3. International Cricket Council -->
+        <article class="project-item">
+          <a href="project-icc.html" class="project-link hoverable" aria-label="View International Cricket Council project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-3"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2023</span>
+                  <span>Federation</span>
+                </div>
+                <h3 class="project-name">International Cricket Council</h3>
+                <p class="project-desc">Rebranding of the ICC's digital platforms — bringing cricket's global governing body into the modern era with a complete sport experience from news to data-rich matchcenters.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI/UX Design</span>
+                  <span class="project-tag">Web</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 4. Qatar 2022 -->
+        <article class="project-item">
+          <a href="project-qatar-2022.html" class="project-link hoverable" aria-label="View Qatar 2022 project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-4"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2022</span>
+                  <span>Hospitality App</span>
+                </div>
+                <h3 class="project-name">Qatar 2022</h3>
+                <p class="project-desc">Dedicated second-screen digital product for the FIFA World Cup 2022 in Qatar — serving fans on-site with live data and hospitality features.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI/UX Design</span>
+                  <span class="project-tag">App</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 5. The Open -->
+        <article class="project-item">
+          <a href="project-the-open.html" class="project-link hoverable" aria-label="View The Open project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-1"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2021</span>
+                  <span>Competition</span>
+                </div>
+                <h3 class="project-name">The Open</h3>
+                <p class="project-desc">Digital experience for golf's oldest major championship — real-time scores, live content, and immersive storytelling inside your pocket.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">UI/UX Design</span>
+                  <span class="project-tag">App</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 6. RMC Sport -->
+        <article class="project-item">
+          <a href="project-rmc-sport.html" class="project-link hoverable" aria-label="View RMC Sport project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-2"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2020</span>
+                  <span>Media & Broadcast</span>
+                </div>
+                <h3 class="project-name">RMC Sport</h3>
+                <p class="project-desc">Creation of a global OTT solution across TV, web and mobile — bringing content to the users wherever they are, whenever they want. Live channels, replays, documentaries and more.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI/UX Design</span>
+                  <span class="project-tag">Web</span>
+                  <span class="project-tag">App</span>
+                  <span class="project-tag">TV</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 7. Sydney Cricket Ground -->
+        <article class="project-item">
+          <a href="project-scg.html" class="project-link hoverable" aria-label="View Sydney Cricket Ground project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-3"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2020</span>
+                  <span>Sports Venue</span>
+                </div>
+                <h3 class="project-name">Sydney Cricket Ground</h3>
+                <p class="project-desc">Digital fan experience for one of Australia's most iconic venues — match day companion app with live stats, way finding, and in-seat ordering.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">UI Design</span>
+                  <span class="project-tag">App</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+
+        <!-- 8. AC Milan 2015 -->
+        <article class="project-item">
+          <a href="project-ac-milan-2015.html" class="project-link hoverable" aria-label="View AC Milan 2015 project">
+            <div class="project-image">
+              <div class="project-image-inner">
+                <div class="project-visual pv-4"></div>
+              </div>
+            </div>
+            <div class="project-info">
+              <div>
+                <div class="project-meta">
+                  <span>2015</span>
+                  <span>Club</span>
+                </div>
+                <h3 class="project-name">AC Milan 2015</h3>
+                <p class="project-desc">First digital overhaul for AC Milan — designing the club's first official app and web platform from scratch, setting the foundation for their digital presence.</p>
+              </div>
+              <div class="project-footer">
+                <div class="project-tags">
+                  <span class="project-tag">Creative Direction</span>
+                  <span class="project-tag">UI Design</span>
+                  <span class="project-tag">Web</span>
+                  <span class="project-tag">App</span>
+                </div>
+                <div class="project-arrow">
+                  <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+                </div>
+              </div>
+            </div>
+          </a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <span class="section-number">02</span>
+          <h2 class="section-title">About</h2>
+        </div>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-statement reveal">
+          I'm a UI Creative Director with a thing for <span class="highlight">clean interfaces</span>, sharp typography, and digital products that <span class="serif-accent">just work</span> — the kind that quietly guide users where they need to go without <span class="serif-accent">shouting</span> about it.
+        </div>
+        <div class="about-details reveal">
+          <p class="about-bio">
+            Graduated from ECV Paris in Art Direction & Multimedia Design in 2014, I've been deep in the digital game — building digital products for major players across the sports industry — from clubs and leagues to broadcasters and media groups. For the past eleven years, I've been leading the creative team at Origins Digital (formerly Netco Sports), a French tech startup at the intersection of media, sports, and innovation. There, I shape user experiences, and keep our visual language consistent, smart, and future-proof.
+          </p>
+          <p class="about-bio">
+            My work lives at the intersection of usability and aesthetics — always grounded in the needs of real users. I believe a good UI should be invisible, and good UX should feel like magic.
+          </p>
+          <p class="about-bio">
+            On the side, I freelance, I paint tiny grimdark space warriors, and I lift heavy things for fun. Let's build something great — and make it beautiful and useful.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="experience" id="experience">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <span class="section-number">03</span>
+          <h2 class="section-title">Experience</h2>
+        </div>
+      </div>
+
+      <div class="timeline reveal-stagger">
+        <div class="timeline-item">
+          <div class="timeline-year">2020 — Present</div>
+          <div class="timeline-content">
+            <div class="timeline-role">Creative Director</div>
+            <div class="timeline-company">Origins Digital — Paris & Biarritz</div>
+            <p class="timeline-desc">Leading the creative team on web products and custom digital platforms. Shipped the redesign of beIN Sports News digital platforms and a second AC Milan digital transformation.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2017 — 2020</div>
+          <div class="timeline-content">
+            <div class="timeline-role">Creative Director</div>
+            <div class="timeline-company">NetcoSports — Paris</div>
+            <p class="timeline-desc">Managed the creative team across mobile apps and websites for international sports clients. Key projects include the digital overhaul of AC Milan and the RMC Sport rebrand.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2015 — 2017</div>
+          <div class="timeline-content">
+            <div class="timeline-role">Art Director</div>
+            <div class="timeline-company">NetcoSports — Paris</div>
+            <p class="timeline-desc">Junior design role focused on mobile app design for global sports organizations. Led the full creative production of the official UEFA Euro 2016 app.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2013 — 2014</div>
+          <div class="timeline-content">
+            <div class="timeline-role">Graphic Designer</div>
+            <div class="timeline-company">CB'a — Paris</div>
+            <p class="timeline-desc">Graduate internship in the Visual Identity department, supporting the team on day-to-day design work for international institutional clients.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials" style="display:none">
+    <div class="container">
+      <div class="section-header reveal">
+        <div>
+          <span class="section-number">04</span>
+          <h2 class="section-title">Kind Words</h2>
+        </div>
+      </div>
+
+      <div class="testimonial-grid reveal-stagger">
+        <div class="testimonial-card">
+          <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+          <p class="testimonial-text">Nicolas has an extraordinary ability to translate complex product requirements into interfaces that feel effortless. The design system work alone saved us months of engineering time.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">MK</div>
+            <div>
+              <div class="testimonial-author-name">Marcus Klein</div>
+              <div class="testimonial-author-role">VP Product, N26</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-quote-mark" aria-hidden="true">&ldquo;</div>
+          <p class="testimonial-text">Working with Nicolas was a masterclass in design craft. Not just screens — but the logic behind every interaction, every state, every edge case.</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SL</div>
+            <div>
+              <div class="testimonial-author-name">Sofia Lindgren</div>
+              <div class="testimonial-author-role">Engineering Lead, Spotify</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner reveal">
+        <h2 class="contact-headline">Let's build<br><span class="serif-accent">something</span> great.</h2>
+        <p class="contact-sub">Currently available for senior UI design roles.<br>Open to full-time and select freelance projects.</p>
+        <a href="mailto:n.bousset@gmail.com" class="contact-cta hoverable">
+          Get in Touch
+          <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7V17"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Nicolas Bousset. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/nicolas-bousset-43657762/" target="_blank" rel="noopener" class="hoverable">LinkedIn</a></li>
+        <li><a href="https://www.behance.net/NicolasBousset/projects" target="_blank" rel="noopener" class="hoverable">Behance</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    /* ═══════════════════════════════════════════════
+       CUSTOM CURSOR
+    ═══════════════════════════════════════════════ */
+    const cursor = document.querySelector('.cursor');
+    const cursorDot = document.querySelector('.cursor-dot');
+    let cursorX = 0, cursorY = 0;
+    let dotX = 0, dotY = 0;
+
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.addEventListener('mousemove', e => {
+        cursorX = e.clientX;
+        cursorY = e.clientY;
+        cursorDot.style.left = cursorX + 'px';
+        cursorDot.style.top = cursorY + 'px';
+      });
+
+      function animateCursor() {
+        dotX += (cursorX - dotX) * 0.15;
+        dotY += (cursorY - dotY) * 0.15;
+        cursor.style.left = dotX + 'px';
+        cursor.style.top = dotY + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      document.querySelectorAll('.hoverable').forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+      });
+    }
+
+    /* ═══════════════════════════════════════════════
+       NAVBAR SCROLL
+    ═══════════════════════════════════════════════ */
+    const nav = document.querySelector('.nav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 100);
+    }, { passive: true });
+
+    /* ═══════════════════════════════════════════════
+       MOBILE MENU
+    ═══════════════════════════════════════════════ */
+    const menuBtn = document.querySelector('.nav-menu-btn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    let menuOpen = false;
+
+    menuBtn.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open', menuOpen);
+      menuBtn.setAttribute('aria-expanded', menuOpen);
+      mobileMenu.setAttribute('aria-hidden', !menuOpen);
+      const spans = menuBtn.querySelectorAll('span');
+      if (menuOpen) {
+        spans[0].style.transform = 'rotate(45deg) translateY(3.75px)';
+        spans[1].style.transform = 'rotate(-45deg) translateY(-3.75px)';
+      } else {
+        spans[0].style.transform = '';
+        spans[1].style.transform = '';
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', false);
+        mobileMenu.setAttribute('aria-hidden', true);
+        const spans = menuBtn.querySelectorAll('span');
+        spans[0].style.transform = '';
+        spans[1].style.transform = '';
+      });
+    });
+
+    /* ═══════════════════════════════════════════════
+       SCROLL REVEAL (Intersection Observer)
+    ═══════════════════════════════════════════════ */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.05, rootMargin: '0px 0px -40px 0px' }
+      );
+
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => el.classList.add('visible'));
+      document.querySelectorAll('.reveal-stagger > *').forEach(el => {
+        el.style.opacity = 1;
+        el.style.transform = 'none';
+      });
+    }
+
+    /* ═══════════════════════════════════════════════
+       SMOOTH SCROLL (for anchor links)
+    ═══════════════════════════════════════════════ */
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

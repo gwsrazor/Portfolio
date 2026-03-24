@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 \"/Users/nicolasbousset/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"portfolio designer creative showcase luxury editorial\" --design-system -p \"Senior UI Designer Portfolio\")",
+      "Bash(python3 \"/Users/nicolasbousset/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"editorial luxury magazine high-end\" --domain style -n 5)",
+      "Bash(python3 \"/Users/nicolasbousset/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"luxury creative artistic display\" --domain typography -n 5)",
+      "Bash(python3 \"/Users/nicolasbousset/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/scripts/search.py\" \"portfolio creative dark luxury\" --domain color -n 5)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(npx --version)",
+      "Bash(ls -la project-*.html)",
+      "Bash(for f:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/nicolasbousset/Desktop/Claude Code/Portfolio V2/**)",
+      "Bash(done)"
+    ]
+  }
+}

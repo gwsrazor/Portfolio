@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "8090", "/Users/nicolasbousset/Desktop/Claude Code/Portfolio V2"],
+      "port": 8090
+    }
+  ]
+}
