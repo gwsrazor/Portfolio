@@ -274,7 +274,7 @@
     .project-cover {
       width: 100%;
       aspect-ratio: 21 / 9;
-      background: var(--bg-card);
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
       border-radius: 2px;
       overflow: hidden;
       position: relative;
@@ -478,7 +478,7 @@
       position: relative;
       overflow: hidden;
       border-radius: 2px;
-      background: var(--bg-card);
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
       cursor: none;
     }
 
@@ -925,7 +925,7 @@
   <!-- Cover Image -->
   <div class="container">
     <div class="project-cover">
-      <div class="project-cover-placeholder pv-3"></div>
+      <img src="images/icc/cover.webp" alt="International Cricket Council — Cover" loading="eager" width="2544" height="1090" style="width:100%;height:100%;object-fit:cover;">
     </div>
   </div>
 
@@ -981,32 +981,32 @@
 
       <div class="gallery-grid reveal-stagger">
         <div class="gallery-item gallery-item--full hoverable" data-index="0">
-          <div class="gallery-placeholder gp-1"></div>
+          <img src="images/icc/gallery-1.webp" alt="International Cricket Council — Gallery 1" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
 
         <div class="gallery-item hoverable" data-index="1">
-          <div class="gallery-placeholder gp-2"></div>
+          <img src="images/icc/gallery-2.webp" alt="International Cricket Council — Gallery 2" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
 
         <div class="gallery-item hoverable" data-index="2">
-          <div class="gallery-placeholder gp-3"></div>
+          <img src="images/icc/gallery-3.webp" alt="International Cricket Council — Gallery 3" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
 
         <div class="gallery-item gallery-item--tall hoverable" data-index="3">
-          <div class="gallery-placeholder gp-4"></div>
+          <img src="images/icc/gallery-4.webp" alt="International Cricket Council — Gallery 4" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
 
         <div class="gallery-item hoverable" data-index="4">
-          <div class="gallery-placeholder gp-5"></div>
+          <img src="images/icc/gallery-5.webp" alt="International Cricket Council — Gallery 5" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
 
         <div class="gallery-item hoverable" data-index="5">
-          <div class="gallery-placeholder gp-1"></div>
+          <img src="images/icc/gallery-6.webp" alt="International Cricket Council — Gallery 6" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
           <div class="gallery-zoom"><svg viewBox="0 0 24 24"><path d="M21 21L16.65 16.65M11 6V16M6 11H16M19 11A8 8 0 1 1 3 11a8 8 0 0 1 16 0Z"/></svg></div>
         </div>
       </div>
@@ -1049,7 +1049,7 @@
       <svg viewBox="0 0 24 24"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
     </button>
     <div class="lightbox-content">
-      <div class="lightbox-placeholder gp-1" id="lightboxImage"></div>
+      <img src="images/icc/gallery-1.webp" alt="International Cricket Council — Gallery 1" id="lightboxImage" style="width:100%;height:100%;object-fit:contain;">
     </div>
     <button class="lightbox-nav lightbox-next hoverable" aria-label="Next image">
       <svg viewBox="0 0 24 24"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>
@@ -1150,7 +1150,7 @@
     const lightboxImage = document.getElementById('lightboxImage');
     const lightboxCounter = document.getElementById('lightboxCounter');
     const galleryItems = document.querySelectorAll('.gallery-item');
-    const gradients = ['gp-1', 'gp-2', 'gp-3', 'gp-4', 'gp-5', 'gp-1'];
+    const imagePaths = ['images/icc/gallery-1.webp', 'images/icc/gallery-2.webp', 'images/icc/gallery-3.webp', 'images/icc/gallery-4.webp', 'images/icc/gallery-5.webp', 'images/icc/gallery-6.webp'];
     let currentIndex = 0;
     const totalImages = galleryItems.length;
 
@@ -1167,8 +1167,9 @@
     }
 
     function updateLightbox() {
-      // Remove old gradient classes, add new
-      lightboxImage.className = 'lightbox-placeholder ' + gradients[currentIndex];
+      // Update lightbox image
+      lightboxImage.src = imagePaths[currentIndex];
+      lightboxImage.alt = 'International Cricket Council — Gallery ' + (currentIndex + 1);
       lightboxCounter.textContent = (currentIndex + 1) + ' / ' + totalImages;
     }
 
