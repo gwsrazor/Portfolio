@@ -120,7 +120,6 @@
       width: 60px;
       height: 60px;
       background: var(--cream);
-      border-color: var(--cream);
     }
 
     .cursor-dot {
@@ -194,11 +193,15 @@
     }
 
     .nav-logo {
-      font-family: var(--font-display);
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: var(--cream);
+        display: flex;
+        align-items: center;
+      }
+      .nav-logo img {
+        height: 36px;
+        width: auto;
+        display: block;
+        display: flex;
+        align-items: center;
     }
 
     .back-link {
@@ -261,12 +264,10 @@
     }
 
     .project-hero-title {
-      font-family: var(--font-display);
       font-size: clamp(2.8rem, 8vw, 7.5rem);
       font-weight: 800;
       line-height: 0.92;
       letter-spacing: -0.04em;
-      color: var(--cream);
       margin-bottom: var(--space-lg);
       opacity: 0;
       transform: translateY(40px);
@@ -389,10 +390,8 @@
     }
 
     .meta-value {
-      font-family: var(--font-display);
       font-size: 1rem;
       font-weight: 600;
-      color: var(--cream);
       line-height: 1.5;
     }
 
@@ -427,12 +426,8 @@
     }
 
     .project-desc-heading {
-      font-family: var(--font-display);
       font-size: clamp(1.6rem, 3vw, 2.4rem);
-      font-weight: 700;
-      letter-spacing: -0.02em;
       line-height: 1.3;
-      color: var(--cream);
     }
 
     .project-desc-heading .accent {
@@ -455,7 +450,6 @@
     }
 
     .project-desc-body p strong {
-      color: var(--cream);
       font-weight: 600;
     }
 
@@ -697,7 +691,6 @@
     }
 
     .lightbox-nav:hover {
-      border-color: var(--cream);
       background: rgba(232, 220, 200, 0.1);
     }
 
@@ -717,7 +710,6 @@
       bottom: var(--space-lg);
       left: 50%;
       transform: translateX(-50%);
-      font-family: var(--font-display);
       font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.1em;
@@ -756,11 +748,7 @@
     }
 
     .project-nav-name {
-      font-family: var(--font-display);
       font-size: clamp(1.2rem, 2vw, 1.6rem);
-      font-weight: 700;
-      color: var(--cream);
-      letter-spacing: -0.02em;
     }
 
     .project-nav-link--next {
@@ -799,7 +787,6 @@
       transition: color 0.3s ease;
     }
 
-    .footer-links a:hover { color: var(--cream); }
     .footer-links a:focus-visible { outline: 2px solid var(--vermillion); outline-offset: 4px; }
 
     /* ═══════════════════════════════════════════════
@@ -939,7 +926,7 @@
   <!-- Navigation -->
   <nav class="nav" role="navigation" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="../" class="nav-logo hoverable">NB.</a>
+      <a href="../" class="nav-logo hoverable"><img src="../logo.svg" alt="NB." width="47" height="36"></a>
       <a href="../#work" class="back-link hoverable">
         <svg viewBox="0 0 24 24"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>
         All Projects
