@@ -1836,8 +1836,8 @@
                     <h3 class="project-name">Sydney Cricket Ground</h3>
                     <p class="project-desc">
                       Digital fan experience for one of Australia's most iconic
-                      venues: match day companion app with live stats, way
-                      finding, and in-seat ordering.
+                      venues: match-day companion app with live stats,
+                      wayfinding, and in-seat ordering.
                     </p>
                   </div>
                   <div class="project-footer">
@@ -2052,7 +2052,7 @@
             <a
               href="https://www.linkedin.com/in/nicolas-bousset-43657762/"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               class="hoverable"
               >LinkedIn</a
             >
@@ -2061,7 +2061,7 @@
             <a
               href="https://www.behance.net/NicolasBousset/projects"
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
               class="hoverable"
               >Behance</a
             >
@@ -2158,6 +2158,19 @@
         });
       });
 
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && menuOpen) {
+          menuOpen = false;
+          mobileMenu.classList.remove("open");
+          menuBtn.setAttribute("aria-expanded", false);
+          mobileMenu.setAttribute("aria-hidden", true);
+          const spans = menuBtn.querySelectorAll("span");
+          spans[0].style.transform = "";
+          spans[1].style.transform = "";
+          menuBtn.focus();
+        }
+      });
+
       /* ═══════════════════════════════════════════════
        SCROLL REVEAL (Intersection Observer)
     ═══════════════════════════════════════════════ */
@@ -2199,7 +2212,10 @@
           const target = document.querySelector(link.getAttribute("href"));
           if (target) {
             e.preventDefault();
-            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            target.scrollIntoView({
+              behavior: prefersReducedMotion ? "auto" : "smooth",
+              block: "start",
+            });
           }
         });
       });
