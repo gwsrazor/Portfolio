@@ -106,6 +106,10 @@
         color: var(--text-primary);
         line-height: 1.6;
         overflow-x: hidden;
+      }
+
+      body.has-custom-cursor,
+      body.has-custom-cursor button {
         cursor: none;
       }
 
@@ -137,7 +141,6 @@
       }
       button {
         font-family: inherit;
-        cursor: none;
       }
 
       /* ═══════════════════════════════════════════════
@@ -151,18 +154,16 @@
         border-radius: 50%;
         pointer-events: none;
         z-index: 9999;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%) scale(1);
         transition:
-          width 0.3s var(--ease-out-expo),
-          height 0.3s var(--ease-out-expo),
+          transform 0.3s var(--ease-out-expo),
           border-color 0.3s ease,
           background 0.3s ease;
         mix-blend-mode: difference;
       }
 
       .cursor.hovering {
-        width: 60px;
-        height: 60px;
+        transform: translate(-50%, -50%) scale(3);
         background: var(--cream);
         border-color: var(--cream);
       }
@@ -210,7 +211,7 @@
         inset: 0;
         z-index: 9998;
         pointer-events: none;
-        opacity: 0.035;
+        opacity: 0.05;
         background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         background-repeat: repeat;
         background-size: 256px 256px;
@@ -289,6 +290,13 @@
       .nav-links a:focus-visible {
         outline: 2px solid var(--vermillion);
         outline-offset: 4px;
+      }
+
+      .nav-links a.active {
+        color: var(--text-primary);
+      }
+      .nav-links a.active::after {
+        width: 100%;
       }
 
       .nav-menu-btn {
@@ -400,7 +408,7 @@
         font-family: var(--font-accent);
         font-weight: 400;
         font-style: italic;
-        color: var(--text-secondary);
+        color: var(--cream);
       }
 
       .hero-bottom {
@@ -462,7 +470,6 @@
         padding-bottom: 0.75rem;
         border-bottom: 1px solid var(--border);
       }
-
 
       .section-title {
         font-family: var(--font-display);
@@ -803,10 +810,8 @@
         letter-spacing: -0.01em;
         color: var(--text-muted);
         white-space: nowrap;
-        padding: 0 var(--space-xl);
         display: flex;
         align-items: center;
-        gap: var(--space-xl);
         transition: color 0.3s ease;
       }
 
@@ -820,6 +825,7 @@
         background: var(--vermillion);
         border-radius: 50%;
         flex-shrink: 0;
+        margin: 0 var(--space-xl);
       }
 
       /* ═══════════════════════════════════════════════
@@ -1443,7 +1449,7 @@
       <div class="marquee-section" aria-label="Skills and expertise">
         <div class="marquee-track">
           <span class="marquee-item"
-            >Sport &amp; Media — 10+ Years
+            >Sport &amp; Medias for 10+ years
             <span class="marquee-dot" aria-hidden="true"></span
           ></span>
           <span class="marquee-item"
@@ -1468,7 +1474,7 @@
           ></span>
           <!-- Duplicate for seamless loop -->
           <span class="marquee-item"
-            >Sport &amp; Media — 10+ Years
+            >Sport &amp; Medias for 10+ years
             <span class="marquee-dot" aria-hidden="true"></span
           ></span>
           <span class="marquee-item"
@@ -1927,8 +1933,8 @@
                 eleven years, I've been leading the creative team at Origins
                 Digital (formerly Netco Sports), a French tech startup at the
                 intersection of media, sports, and innovation. There, I shape
-                user experiences, and keep our visual language consistent,
-                smart, and future-proof.
+                user experiences, and keep our visual language consistent, built
+                to last.
               </p>
               <p class="about-bio">
                 My work lives at the intersection of usability and aesthetics —
@@ -2075,6 +2081,8 @@
         dotY = 0;
 
       if (window.matchMedia("(pointer: fine)").matches) {
+        document.body.classList.add("has-custom-cursor");
+
         document.addEventListener("mousemove", (e) => {
           cursorX = e.clientX;
           cursorY = e.clientY;
@@ -2194,6 +2202,33 @@
           }
         });
       });
+
+      /* ═══════════════════════════════════════════════
+       NAV ACTIVE STATE
+    ═══════════════════════════════════════════════ */
+      const sections = document.querySelectorAll(
+        "#work, #about, #experience, #contact",
+      );
+      const navLinks = document.querySelectorAll(".nav-links a");
+
+      const navObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              navLinks.forEach((link) => {
+                link.classList.toggle(
+                  "active",
+                  link.getAttribute("href") === `#${id}`,
+                );
+              });
+            }
+          });
+        },
+        { threshold: 0.3, rootMargin: "-10% 0px -60% 0px" },
+      );
+
+      sections.forEach((section) => navObserver.observe(section));
     </script>
   </body>
 </html>
