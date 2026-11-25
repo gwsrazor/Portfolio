@@ -142,3 +142,16 @@ button { font-family: inherit; }
 .proposal-badge a { padding: 0.45rem 0.9rem; border-radius: 999px; color: var(--text-secondary); }
 .proposal-badge a[aria-current="page"] { background: var(--cream); color: var(--bg); }
 @media (max-width: 600px) { .proposal-badge .pb-name { display: none; } .proposal-badge a { padding: 0.45rem 0.8rem; } }
+
+/* Lightbox (shared by gallery variations) */
+.lb { position: fixed; inset: 0; z-index: 9990; background: rgba(10,10,10,0.94); display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .4s var(--ease-out-expo); }
+.lb.open { opacity: 1; pointer-events: auto; }
+.lb img { max-width: 88vw; max-height: 82vh; object-fit: contain; border-radius: 2px; transform: scale(.96); transition: transform .5s var(--ease-out-expo); }
+.lb.open img { transform: none; }
+.lb button { position: absolute; background: none; border: 1px solid var(--border); color: var(--cream); width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; }
+.lb button:hover { border-color: var(--vermillion); }
+.lb svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+.lb-close { top: 1.5rem; right: 1.5rem; }
+.lb-prev { left: 1.5rem; top: 50%; transform: translateY(-50%); }
+.lb-next { right: 1.5rem; top: 50%; transform: translateY(-50%); }
+.lb-count { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; color: var(--text-muted); }

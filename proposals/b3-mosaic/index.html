@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Proposal B3: Mosaic</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../../favicon.ico" sizes="32x32" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../shared.css" />
+  <style>
+    /* ═══════════════════════════════════════════════
+       B — CHAPTERS
+       Refs: DOE x Cymbiotika (numbered chapter nav, key-figure row),
+             Oxnod (structured project details, challenge/approach rhythm)
+    ═══════════════════════════════════════════════ */
+    .progress { position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 101; background: var(--vermillion); transform-origin: 0 50%; transform: scaleX(0); }
+
+    /* HERO */
+    .hero { padding-top: 8.5rem; padding-bottom: var(--space-xl); }
+    .hero-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-md); padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); margin-bottom: var(--space-lg); opacity: 0; transform: translateY(20px); animation: fadeUp .8s var(--ease-out-expo) .15s forwards; }
+    .bracket { font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--vermillion); }
+    .bracket::before { content: "( "; color: var(--text-muted); } .bracket::after { content: " )"; color: var(--text-muted); }
+    .hero-client { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+    .hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--space-xl); align-items: end; }
+    .hero-title { font-family: var(--font-display); font-weight: 800; color: var(--cream); font-size: clamp(3.2rem, 10vw, 10rem); line-height: 0.88; letter-spacing: -0.045em; }
+    .hero-title .line { display: block; overflow: hidden; padding-bottom: 0.04em; }
+    .hero-title .line span { display: inline-block; transform: translateY(105%); animation: slideUp 1s var(--ease-out-expo) forwards; }
+    .hero-title .line:nth-child(2) span { animation-delay: .12s; }
+    .hero-title .accent { font-weight: 400; }
+    .hero-side { opacity: 0; transform: translateY(30px); animation: fadeUp .8s var(--ease-out-expo) .5s forwards; }
+    .hero-sub { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: var(--space-md); max-width: 42ch; }
+    .chips { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+
+    .figures { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: var(--space-xl); border-top: 1px solid var(--border); }
+    .figure { padding: var(--space-md) var(--space-md) 0 0; }
+    .figure + .figure { padding-left: var(--space-md); border-left: 1px solid var(--border); }
+    .figure-num { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -0.03em; color: var(--cream); line-height: 1; }
+    .figure-num em { font-family: var(--font-accent); font-weight: 400; color: var(--vermillion); }
+    .figure-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.4rem; max-width: 24ch; }
+
+    .cover { margin-top: var(--space-xl); aspect-ratio: 2544/1090; overflow: hidden; border-radius: 2px; background: var(--bg-card); }
+    .cover img { width: 100%; height: 120%; object-fit: cover; transform: translateY(var(--py, 0)); }
+
+    /* BODY: sticky chapter rail + content */
+    .body { padding: var(--space-2xl) 0; }
+    .body-grid { display: grid; grid-template-columns: 220px 1fr; gap: var(--space-3xl); }
+    .body-grid > * { min-width: 0; }
+    .rail { position: sticky; top: 7rem; align-self: start; }
+    .rail-title { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--space-md); }
+    .rail ol { list-style: none; border-left: 1px solid var(--border); }
+    .rail a { position: relative; display: flex; gap: 0.9rem; padding: 0.55rem 0 0.55rem 1.1rem; font-size: 0.85rem; color: var(--text-muted); transition: color .3s ease; }
+    .rail a::before { content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 1px; background: var(--vermillion); transform: scaleY(0); transform-origin: top; transition: transform .5s var(--ease-out-expo); }
+    .rail a span { font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; }
+    .rail a:hover { color: var(--text-primary); }
+    .rail a.active { color: var(--cream); }
+    .rail a.active::before { transform: scaleY(1); }
+    .rail a.active span { color: var(--vermillion); }
+
+    .chapter { padding-bottom: var(--space-2xl); scroll-margin-top: 7rem; }
+    .chapter + .chapter { padding-top: var(--space-xl); border-top: 1px solid var(--border); }
+    .ch-num { font-family: var(--font-display); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.06em; color: var(--vermillion); margin-bottom: var(--space-sm); }
+    .ch-title { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 3.4vw, 3rem); line-height: 1.1; letter-spacing: -0.03em; color: var(--cream); margin-bottom: var(--space-lg); max-width: 20ch; }
+    .ch-title .accent { color: var(--text-secondary); }
+    .ch-text { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-lg); }
+    .ch-text p { color: var(--text-secondary); line-height: 1.75; }
+    .ch-text strong { color: var(--text-primary); font-weight: 600; }
+    .pull { font-family: var(--font-accent); font-style: italic; font-size: clamp(1.6rem, 2.8vw, 2.4rem); line-height: 1.25; color: var(--cream); border-left: 2px solid var(--vermillion); padding-left: var(--space-md); margin: var(--space-xl) 0; max-width: 30ch; }
+
+    .list { list-style: none; counter-reset: li; display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-lg); }
+    .list li { counter-increment: li; display: flex; gap: var(--space-sm); padding: var(--space-sm) 0; border-bottom: 1px solid var(--border); color: var(--text-secondary); font-size: 0.95rem; }
+    .list li::before { content: counter(li, decimal-leading-zero); font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; color: var(--vermillion); padding-top: 0.2rem; }
+
+    .screens { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
+    .screen { margin: 0; }
+    .screen--wide { grid-column: 1 / -1; }
+    .screen-img { overflow: hidden; border-radius: 2px; background: #f3f3f3; }
+    .screen-img img { width: 100%; transition: transform 1s var(--ease-out-expo); }
+    .screen:hover .screen-img img { transform: scale(1.03); }
+    .screen figcaption { display: flex; gap: var(--space-sm); padding: 0.75rem 0 var(--space-md); font-size: 0.8rem; color: var(--text-muted); }
+    .screen figcaption b { font-family: var(--font-display); color: var(--cream); font-weight: 700; }
+
+    .details { width: 100%; border-collapse: collapse; }
+    .details th, .details td { text-align: left; padding: 1.1rem 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .details th { width: 32%; font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+    .details td { font-family: var(--font-display); font-weight: 600; color: var(--cream); }
+    .details td .chips { margin-top: 0.1rem; }
+
+    /* PREV / NEXT rows (homepage timeline rhythm) */
+    .pn { border-top: 1px solid var(--border); }
+    .pn-row { position: relative; display: grid; grid-template-columns: 200px 1fr auto; gap: var(--space-xl); align-items: center; padding: var(--space-xl) 0; border-bottom: 1px solid var(--border); }
+    .pn-label { font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; color: var(--vermillion); }
+    .pn-name { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.2rem, 6vw, 5rem); letter-spacing: -0.04em; line-height: 1; color: var(--text-muted); transition: color .4s ease, transform .6s var(--ease-out-expo); }
+    .pn-row:hover .pn-name { color: var(--cream); transform: translateX(12px); }
+    .pn-thumb { width: 220px; aspect-ratio: 1272/840; overflow: hidden; border-radius: 2px; clip-path: inset(0 0 0 100%); transition: clip-path .7s var(--ease-in-out); }
+    .pn-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .pn-row:hover .pn-thumb, .pn-row:focus-visible .pn-thumb { clip-path: inset(0 0 0 0); }
+
+    @media (max-width: 900px) {
+      .hero-grid, .ch-text, .list { grid-template-columns: 1fr; }
+      .body-grid { grid-template-columns: 1fr; gap: var(--space-lg); }
+      .rail { position: sticky; top: 4.6rem; z-index: 50; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); margin: 0 calc(-1 * clamp(1.5rem, 4vw, 4rem)); padding: 0.4rem clamp(1.5rem, 4vw, 4rem); }
+      .rail-title { display: none; }
+      .rail ol { display: flex; gap: var(--space-md); overflow-x: auto; border-left: 0; scrollbar-width: none; }
+      .rail a { padding: 0.5rem 0; white-space: nowrap; }
+      .rail a::before { left: 0; right: 0; top: auto; bottom: 0; width: auto; height: 1px; transform: scaleX(0); transform-origin: left; }
+      .rail a.active::before { transform: scaleX(1); }
+      .figures { grid-template-columns: 1fr; }
+      .figure + .figure { padding-left: 0; border-left: 0; border-top: 1px solid var(--border); }
+      .figure { padding-bottom: var(--space-md); }
+      .screens { grid-template-columns: 1fr; }
+      .pn-row { grid-template-columns: 1fr; gap: var(--space-xs); }
+      .pn-thumb { display: none; }
+    }
+
+    /* ── Gallery chapter (full-bleed) ── */
+    .gchapter { position: relative; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); scroll-margin-top: 0; }
+    .g-head { display: flex; justify-content: space-between; align-items: flex-end; gap: var(--space-md); }
+    .g-head .ch-title { margin-bottom: 0; }
+    .g-hint { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); white-space: nowrap; }
+    .body--after { padding-top: var(--space-2xl); }
+    .body--after .rail-title { visibility: hidden; }
+    .tile-btn { appearance: none; border: 0; padding: 0; margin: 0; background: none; color: inherit; font: inherit; text-align: left; }
+
+    /* B3 — MOSAIC. Refs: OFFF Forum (grid of work), Spyker Cars (cinematic, layered parallax) */
+    .mo-pin { height: 320vh; }
+    .mo-sticky { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: var(--space-md); padding-top: 4.5rem; --e: 0; }
+    .mo-head .ch-title { max-width: none; }
+    .mo-head { opacity: var(--e); transform: translateY(calc(30px * (1 - var(--e)))); }
+    .mo-grid { position: relative; display: grid; grid-template-columns: 1fr 1.35fr 1.35fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 10px; height: 66vh; width: 100%; }
+    .mo-tile { position: relative; overflow: hidden; border-radius: 4px; background: #f4f4f4; will-change: transform, opacity; }
+    .mo-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s var(--ease-out-expo); }
+    .mo-t1 { grid-column: 2 / 4; grid-row: 1 / 3; z-index: 2; }
+    .mo-t2 { grid-column: 1 / 2; grid-row: 1 / 4; }
+    .mo-t3 { grid-column: 4 / 5; grid-row: 1 / 2; }
+    .mo-t4 { grid-column: 4 / 5; grid-row: 2 / 4; }
+    .mo-t5 { grid-column: 2 / 3; grid-row: 3 / 4; }
+    .mo-t6 { grid-column: 3 / 4; grid-row: 3 / 4; }
+    .mo-t2 img, .mo-t4 img { object-position: 50% 30%; }
+    .mo-cap { position: absolute; left: 0.75rem; bottom: 0.75rem; display: flex; gap: 0.5rem; align-items: center; padding: 0.4rem 0.7rem; background: rgba(10,10,10,0.88); color: var(--cream); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; opacity: 0; transform: translateY(8px); transition: all .45s var(--ease-out-expo); }
+    .mo-cap b { font-family: var(--font-display); color: var(--vermillion); }
+    .settled .mo-tile:hover img { transform: scale(1.05); }
+    .settled .mo-tile:hover .mo-cap, .settled .mo-tile:focus-visible .mo-cap { opacity: 1; transform: none; }
+    .mo-word { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(calc(1 + 0.25 * var(--e))); z-index: 5; pointer-events: none; text-align: center;
+      font-family: var(--font-display); font-weight: 800; text-transform: uppercase; color: var(--cream); mix-blend-mode: difference;
+      font-size: clamp(3rem, 11vw, 12rem); line-height: 0.85; letter-spacing: -0.05em; opacity: calc(1 - 1.6 * var(--e)); }
+    .mo-word .accent { text-transform: none; letter-spacing: -0.02em; }
+    @media (max-width: 900px) {
+      .mo-pin { height: auto; }
+      .mo-sticky { position: relative; height: auto; padding: var(--space-2xl) 0; --e: 1; overflow: visible; }
+      .mo-word { display: none; }
+      .g-hint { display: none; }
+      .mo-grid { grid-template-columns: 1fr 1fr; grid-template-rows: none; grid-auto-rows: 28vw; grid-auto-flow: dense; height: auto; }
+      .mo-t1 { grid-column: 1 / -1; grid-row: span 2; }
+      .mo-t2 { grid-column: 1 / 2; grid-row: span 3; }
+      .mo-t3, .mo-t5, .mo-t6 { grid-column: 2 / 3; grid-row: span 1; }
+      .mo-t4 { grid-column: 1 / -1; grid-row: span 2; }
+      .mo-cap { opacity: 1; transform: none; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-dot" aria-hidden="true"></div>
+
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="../../" class="nav-logo hoverable"><img src="../../logo.svg" alt="NB." width="47" height="36" /></a>
+      <a href="../../#work" class="back-link hoverable">
+        <svg viewBox="0 0 24 24"><path d="M19 12H5M5 12L12 19M5 12L12 5" /></svg>
+        All Projects
+      </a>
+    </div>
+  </nav>
+
+  <main>
+    <header class="hero container">
+      <div class="hero-top">
+        <span class="bracket">Case study 05</span>
+        <span class="hero-client">The R&amp;A · 2021</span>
+      </div>
+      <div class="hero-grid">
+        <h1 class="hero-title">
+          <span class="line"><span>The</span></span>
+          <span class="line"><span><em class="accent">Open</em></span></span>
+        </h1>
+        <div class="hero-side">
+          <p class="hero-sub">Digital experience for golf's oldest major championship: real-time scores, live content and editorial depth, all from mobile.</p>
+          <div class="chips"><span class="tag">UI/UX Design</span><span class="tag">App</span></div>
+        </div>
+      </div>
+
+      <div class="figures reveal-stagger">
+        <div class="figure"><div class="figure-num">150<em>+</em></div><p class="figure-label">Years of championship heritage to carry into digital</p></div>
+        <div class="figure"><div class="figure-num">2</div><p class="figure-label">Audiences: fans on the links and fans at home</p></div>
+        <div class="figure"><div class="figure-num">6</div><p class="figure-label">Core journeys, from tournament hub to push notifications</p></div>
+      </div>
+
+      <div class="cover reveal">
+        <img id="cover" src="../../images/the-open/cover.webp" alt="The Open championship app on two phones" width="2544" height="1090" />
+      </div>
+    </header>
+
+    <section class="body">
+      <div class="container body-grid">
+        <aside class="rail" aria-label="Chapters">
+          <p class="rail-title">Chapters</p>
+          <ol>
+            <li><a href="#brief" class="hoverable active"><span>01</span>Brief</a></li>
+            <li><a href="#challenge" class="hoverable"><span>02</span>Challenge</a></li>
+            <li><a href="#approach" class="hoverable"><span>03</span>Approach</a></li>
+            <li><a href="#screens" class="hoverable"><span>04</span>Screens</a></li>
+            <li><a href="#details" class="hoverable"><span>05</span>Details</a></li>
+          </ol>
+        </aside>
+        <div class="chapters">
+          <article class="chapter" id="brief">
+            <p class="ch-num">01 — Brief</p>
+            <h2 class="ch-title reveal">Honouring tradition through <span class="accent">modern craft</span> in digital.</h2>
+            <div class="ch-text reveal">
+              <p>The Open Championship carries over 150 years of history: it's golf's original major, and its digital experience needed to reflect that legacy while serving a mobile-first audience that follows every shot on their phone.</p>
+              <p>The R&amp;A wanted an app that felt as premium as the event itself, serving fans both on the links and watching from home.</p>
+            </div>
+          </article>
+
+          <article class="chapter" id="challenge">
+            <p class="ch-num">02 — Challenge</p>
+            <h2 class="ch-title reveal">Live data, <span class="accent">editorial</span> soul.</h2>
+            <div class="ch-text reveal">
+              <p><strong>The objective:</strong> design a championship app that combined real-time leaderboard data, hole-by-hole scoring and live video.</p>
+              <p>All of it with the editorial depth and visual richness that The Open's heritage demands. Every detail, from typography to transitions, had to be deliberate.</p>
+            </div>
+            <blockquote class="pull reveal">“As premium as the event itself, on the links and from the sofa.”</blockquote>
+          </article>
+
+          <article class="chapter" id="approach">
+            <p class="ch-num">03 — Approach</p>
+            <h2 class="ch-title reveal">End-to-end, <span class="accent">shot by shot.</span></h2>
+            <div class="ch-text reveal" style="margin-bottom: var(--space-lg)">
+              <p>I designed the end-to-end experience across the app. The visual language drew from The Open's brand identity while carving out a cleaner digital language faithful to the championship's character.</p>
+              <p>The scope covered every moment of a fan's tournament day:</p>
+            </div>
+            <ol class="list reveal-stagger">
+              <li>Tournament hub</li>
+              <li>Live leaderboard &amp; scorecards</li>
+              <li>Interactive course maps</li>
+              <li>Player profiles</li>
+              <li>Tickets &amp; onboarding</li>
+              <li>Push notification flows</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="gchapter g-mosaic" id="screens" aria-label="Screens">
+      <div class="mo-pin">
+        <div class="mo-sticky">
+          <div class="container g-head mo-head">
+            <div><p class="ch-num">04 — Screens</p><h2 class="ch-title">The whole <span class="accent">tournament</span>, at a glance.</h2></div>
+            <span class="g-hint">Click any screen to enlarge</span>
+          </div>
+          <div class="container mo-grid">
+            <button type="button" class="mo-tile mo-t1 tile-btn hoverable" data-lb="../../images/the-open/gallery-1.webp" aria-label="Enlarge: Tournament hub, highlights and news">
+              <img src="../../images/the-open/gallery-1.webp" alt="Tournament hub, highlights and news" loading="eager" />
+              <span class="mo-cap"><b>01</b>Tournament hub</span>
+            </button>
+            <button type="button" class="mo-tile mo-t2 tile-btn hoverable" data-lb="../../images/the-open/gallery-4.webp" aria-label="Enlarge: Live leaderboard with inline scorecard">
+              <img src="../../images/the-open/gallery-4.webp" alt="Live leaderboard with inline scorecard" loading="eager" />
+              <span class="mo-cap"><b>02</b>Live leaderboard</span>
+            </button>
+            <button type="button" class="mo-tile mo-t3 tile-btn hoverable" data-lb="../../images/the-open/gallery-3.webp" aria-label="Enlarge: Players and round scorecards">
+              <img src="../../images/the-open/gallery-3.webp" alt="Players and round scorecards" loading="lazy" />
+              <span class="mo-cap"><b>03</b>Players</span>
+            </button>
+            <button type="button" class="mo-tile mo-t4 tile-btn hoverable" data-lb="../../images/the-open/gallery-6.webp" aria-label="Enlarge: Hole guide and player profile">
+              <img src="../../images/the-open/gallery-6.webp" alt="Hole guide and player profile" loading="lazy" />
+              <span class="mo-cap"><b>04</b>Hole guide</span>
+            </button>
+            <button type="button" class="mo-tile mo-t5 tile-btn hoverable" data-lb="../../images/the-open/gallery-2.webp" aria-label="Enlarge: Onboarding and sign-in">
+              <img src="../../images/the-open/gallery-2.webp" alt="Onboarding and sign-in" loading="lazy" />
+              <span class="mo-cap"><b>05</b>Onboarding</span>
+            </button>
+            <button type="button" class="mo-tile mo-t6 tile-btn hoverable" data-lb="../../images/the-open/gallery-5.webp" aria-label="Enlarge: Tickets and digital wallet">
+              <img src="../../images/the-open/gallery-5.webp" alt="Tickets and digital wallet" loading="lazy" />
+              <span class="mo-cap"><b>06</b>Tickets</span>
+            </button>
+          </div>
+          <p class="mo-word" aria-hidden="true">Selected<br /><span class="accent">screens</span></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="body body--after">
+      <div class="container body-grid">
+        <aside class="rail" aria-label="Chapters">
+          <p class="rail-title">Chapters</p>
+          <ol>
+            <li><a href="#brief" class="hoverable active"><span>01</span>Brief</a></li>
+            <li><a href="#challenge" class="hoverable"><span>02</span>Challenge</a></li>
+            <li><a href="#approach" class="hoverable"><span>03</span>Approach</a></li>
+            <li><a href="#screens" class="hoverable"><span>04</span>Screens</a></li>
+            <li><a href="#details" class="hoverable"><span>05</span>Details</a></li>
+          </ol>
+        </aside>
+        <div class="chapters">
+          <article class="chapter" id="details">
+            <p class="ch-num">05 — Details</p>
+            <h2 class="ch-title reveal">Project <span class="accent">details</span></h2>
+            <table class="details reveal">
+              <tr><th scope="row">Client</th><td>The R&amp;A</td></tr>
+              <tr><th scope="row">Year</th><td>2021</td></tr>
+              <tr><th scope="row">Role</th><td>UI/UX Designer</td></tr>
+              <tr><th scope="row">Sector</th><td>Golf · Major championship</td></tr>
+              <tr><th scope="row">Deliverables</th><td><div class="chips"><span class="tag">UI/UX Design</span><span class="tag">App</span></div></td></tr>
+            </table>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <nav class="pn container" aria-label="More projects">
+      <a href="../../project-qatar-2022/" class="pn-row hoverable">
+        <span class="pn-label">Previous</span>
+        <span class="pn-name">Qatar 2022</span>
+        <span class="pn-thumb"><img src="../../images/qatar-2022/card.webp" alt="" loading="lazy" /></span>
+      </a>
+      <a href="../../project-rmc-sport/" class="pn-row hoverable">
+        <span class="pn-label">Next</span>
+        <span class="pn-name">RMC Sport</span>
+        <span class="pn-thumb"><img src="../../images/rmc-sport/card.webp" alt="" loading="lazy" /></span>
+      </a>
+    </nav>
+  </main>
+
+  <footer class="footer" style="margin-top: var(--space-2xl)">
+    <div class="container footer-inner">
+      <p class="footer-copy">&copy; 2026 Nicolas Bousset. All rights reserved.</p>
+      <ul class="footer-links">
+        <li><a href="https://www.linkedin.com/in/nicolas-bousset-43657762/" target="_blank" rel="noopener noreferrer" class="hoverable">LinkedIn</a></li>
+        <li><a href="https://www.behance.net/NicolasBousset/projects" target="_blank" rel="noopener noreferrer" class="hoverable">Behance</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <nav class="proposal-badge" aria-label="Proposals">
+    <a href="../" class="hoverable">All<span class="pb-name"></span></a>
+    <a href="../b1-accordion/" class="hoverable">B1<span class="pb-name"> · Accordion</span></a>
+    <a href="../b2-stack/" class="hoverable">B2<span class="pb-name"> · Stack</span></a>
+    <a href="../b3-mosaic/" class="hoverable" aria-current="page">B3<span class="pb-name"> · Mosaic</span></a>
+  </nav>
+
+  <script src="../shared.js"></script>
+  <script>
+    const bar = document.getElementById("progress");
+    const cover = document.getElementById("cover");
+    function onScroll() {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+      if (!window.__reducedMotion) {
+        const r = cover.parentElement.getBoundingClientRect();
+        const t = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight + r.height)));
+        cover.style.setProperty("--py", `${(-t * 16).toFixed(2)}%`);
+      }
+    }
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+
+    /* Chapter rail active state */
+    const links = [...document.querySelectorAll(".rail a")];
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        links.forEach((l) => {
+          const on = l.getAttribute("href") === "#" + e.target.id;
+          l.classList.toggle("active", on);
+          if (on && innerWidth <= 900) { const ol = l.closest("ol"); ol.scrollTo({ left: l.offsetLeft - ol.clientWidth / 2 + l.offsetWidth / 2, behavior: "smooth" }); }
+        });
+      });
+    }, { rootMargin: "-30% 0px -60% 0px" });
+    document.querySelectorAll(".chapter, .gchapter").forEach((c) => io.observe(c));
+    links.forEach((l) => l.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.querySelector(l.getAttribute("href")).scrollIntoView({ behavior: window.__reducedMotion ? "auto" : "smooth" });
+    }));
+
+    /* B3 mosaic: the hero screen starts full-bleed, then shrinks into the grid while the others fly in at different speeds */
+    (() => {
+      const pin = document.querySelector(".mo-pin");
+      const sticky = document.querySelector(".mo-sticky");
+      const tiles = [...document.querySelectorAll(".mo-tile")];
+      const hero = tiles[0];
+      const desktop = matchMedia("(min-width: 901px)");
+      let rest = [];
+      const clamp = (v) => Math.min(1, Math.max(0, v));
+      const ease = (x) => 1 - Math.pow(1 - x, 3);
+      function measure() {
+        tiles.forEach((t) => (t.style.transform = "none"));
+        const s = sticky.getBoundingClientRect();
+        rest = tiles.map((t) => { const b = t.getBoundingClientRect(); return { cx: b.left + b.width / 2 - s.left, cy: b.top + b.height / 2 - s.top, w: b.width, h: b.height }; });
+        tick();
+      }
+      function tick() {
+        if (!desktop.matches) { tiles.forEach((t) => { t.style.transform = ""; t.style.opacity = ""; }); sticky.classList.add("settled"); return; }
+        const r = pin.getBoundingClientRect();
+        const span = pin.offsetHeight - innerHeight;
+        const p = window.__reducedMotion ? 1 : clamp(-r.top / span);
+        const e = ease(clamp(p / 0.75));
+        sticky.style.setProperty("--e", e.toFixed(4));
+        sticky.classList.toggle("settled", e > 0.98);
+        const s = sticky.getBoundingClientRect();
+        const H = rest[0];
+        const s0 = Math.max(innerWidth / H.w, innerHeight / H.h);
+        const dx = innerWidth / 2 - (s.left + H.cx), dy = innerHeight / 2 - (s.top + H.cy);
+        hero.style.transform = `translate(${(dx * (1 - e)).toFixed(1)}px, ${(dy * (1 - e)).toFixed(1)}px) scale(${(1 + (s0 - 1) * (1 - e)).toFixed(4)})`;
+        tiles.slice(1).forEach((t, k) => {
+          const R = rest[k + 1];
+          const vx = R.cx - H.cx, vy = R.cy - H.cy, len = Math.hypot(vx, vy) || 1;
+          const local = ease(clamp((p - 0.12 - k * 0.04) / 0.6));   // staggered, different speeds = parallax depth
+          const push = (1 - local) * (innerHeight * (0.55 + k * 0.08));
+          t.style.transform = `translate(${(vx / len * push).toFixed(1)}px, ${(vy / len * push).toFixed(1)}px) scale(${(0.8 + 0.2 * local).toFixed(3)})`;
+          t.style.opacity = local.toFixed(3);
+        });
+      }
+      addEventListener("scroll", tick, { passive: true });
+      addEventListener("resize", measure);
+      addEventListener("load", measure);
+      measure();
+    })();
+
+  </script>
+</body>
+</html>

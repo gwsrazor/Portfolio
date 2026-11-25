@@ -45,3 +45,31 @@
     targets.forEach((el) => io.observe(el));
   }
 })();
+
+/* Lightbox: any [data-lb] element opens its data-lb image; ordered by DOM. */
+(() => {
+  const items = [...document.querySelectorAll("[data-lb]")];
+  if (!items.length) return;
+  const srcs = [...new Set(items.map((el) => el.dataset.lb))];
+  const lb = document.createElement("div");
+  lb.className = "lb"; lb.setAttribute("role", "dialog"); lb.setAttribute("aria-modal", "true"); lb.setAttribute("aria-label", "Image viewer");
+  lb.innerHTML = '<img alt="" /><button class="lb-close hoverable" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button><button class="lb-prev hoverable" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg></button><button class="lb-next hoverable" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg></button><span class="lb-count"></span>';
+  document.body.appendChild(lb);
+  const img = lb.querySelector("img"), count = lb.querySelector(".lb-count");
+  let i = 0;
+  const show = () => { img.src = srcs[i]; count.textContent = `${String(i + 1).padStart(2, "0")} / ${String(srcs.length).padStart(2, "0")}`; };
+  const open = (n) => { i = n; show(); lb.classList.add("open"); document.body.style.overflow = "hidden"; lb.querySelector(".lb-close").focus(); };
+  const close = () => { lb.classList.remove("open"); document.body.style.overflow = ""; };
+  window.__openLightbox = (src) => open(Math.max(0, srcs.indexOf(src)));
+  items.forEach((el) => el.addEventListener("click", (e) => { if (el.dataset.lbManual) return; e.preventDefault(); open(srcs.indexOf(el.dataset.lb)); }));
+  lb.querySelector(".lb-close").onclick = close;
+  lb.querySelector(".lb-prev").onclick = () => { i = (i - 1 + srcs.length) % srcs.length; show(); };
+  lb.querySelector(".lb-next").onclick = () => { i = (i + 1) % srcs.length; show(); };
+  lb.addEventListener("click", (e) => { if (e.target === lb) close(); });
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") close();
+    if (e.key === "ArrowRight") lb.querySelector(".lb-next").click();
+    if (e.key === "ArrowLeft") lb.querySelector(".lb-prev").click();
+  });
+})();
