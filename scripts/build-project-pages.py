@@ -8,11 +8,16 @@ safely after layout tweaks:
 
 Styles and behaviour live in assets/project.css and assets/project.js.
 """
+import html
 import re
+import sys
 import subprocess
 from pathlib import Path
 
 from bs4 import BeautifulSoup
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from project_alts import ALTS  # noqa: E402
 
 SOURCE_REF = "8eebf5e"  # last commit with the original project pages
 ROOT = Path(__file__).resolve().parent.parent
@@ -68,6 +73,10 @@ def build(slug):
     brief, challenge, approach = paras[0], paras[1], " ".join(paras[2:])
 
     imgs = [(img["src"], img.get("alt", "")) for img in soup.select(".gallery-item img")]
+    alts = [html.escape(a) for a in ALTS[slug]]
+    assert len(alts) == len(imgs) + 1, f"{slug}: {len(imgs)} gallery images, {len(alts) - 1} alts"
+    cover_alt = alts[0]
+    imgs = [(src, alt) for (src, _), alt in zip(imgs, alts[1:])]
 
     nav_links = []
     for a in soup.select(".project-nav-link"):
@@ -150,7 +159,7 @@ def build(slug):
 {facts}
         </div>
         <div class="cover reveal">
-          <img src="{cover['src']}" alt="{cover.get('alt', '')}" width="{cover.get('width', '2544')}" height="{cover.get('height', '1090')}" fetchpriority="high" />
+          <img src="{cover['src']}" alt="{cover_alt}" width="{cover.get('width', '2544')}" height="{cover.get('height', '1090')}" fetchpriority="high" />
         </div>
       </header>
 
