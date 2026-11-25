@@ -82,17 +82,17 @@ def build(slug):
     title_lines = "\n".join(line(i, l) for i, l in enumerate(lines))
     # Fit the longest title line to its column (Syne 800 ≈ 0.74em per glyph)
     longest = max(len(re.sub(r"<[^>]+>", "", l)) for l in lines)
-    fit_d = round(min(7.4, 50 / (longest * 0.74)), 2)
-    fit_m = round(min(14, 86 / (longest * 0.74)), 2)
-    tag_html = "".join(f'<span class="tag">{t}</span>' for t in tags)
+    fit_d = round(min(10, 86 / (longest * 0.86)), 2)
+    fit_m = round(min(14, 86 / (longest * 0.86)), 2)
+    tag_html = "".join(f'<li class="tag">{t}</li>' for t in tags)
     facts = "\n".join(
         f'          <div class="fact"><p class="label">{k}</p><p class="fact-value">{inner(meta[k])}</p></div>'
         for k in ("Client", "Year", "Role")
     )
     n = len(imgs)
     panels = "\n".join(
-        f"""          <button type="button" class="acc-panel hoverable" data-full="{src}" aria-expanded="false" aria-label="Image {i + 1:02d} of {n:02d}. Select again to view full screen">
-            <img src="{src}" alt="{alt}" loading="{'eager' if i == 0 else 'lazy'}" decoding="async" />
+        f"""          <button type="button" class="acc-panel hoverable" data-full="{src}" data-alt="{alt}" aria-label="View image {i + 1:02d} of {n:02d} full screen: {alt}">
+            <img src="{src}" alt="" loading="{'eager' if i == 0 else 'lazy'}" decoding="async" />
             <span class="acc-num" aria-hidden="true">({i + 1:02d})</span>
             <span class="acc-cap" aria-hidden="true"><b>({i + 1:02d})</b>View full screen<i>{ZOOM}</i></span>
           </button>"""
@@ -106,7 +106,7 @@ def build(slug):
         </a>"""
         for label, name, href, tslug in nav_links
     )
-    rail = """        <aside class="rail" aria-label="Chapters">
+    rail = """        <nav class="rail" aria-label="Chapters">
           <p class="label">Chapters</p>
           <ol>
             <li><a href="#brief" class="hoverable active"><span>01</span>Brief</a></li>
@@ -114,7 +114,7 @@ def build(slug):
             <li><a href="#approach" class="hoverable"><span>03</span>Approach</a></li>
             <li><a href="#gallery" class="hoverable"><span>04</span>Gallery</a></li>
           </ol>
-        </aside>"""
+        </nav>"""
 
     body = f"""
   <body>
@@ -142,7 +142,8 @@ def build(slug):
           </h1>
           <div class="hero-side">
             <p class="hero-sub">{subtitle}</p>
-            <div class="tags" aria-label="Deliverables">{tag_html}</div>
+            <p class="label" id="deliverables">Deliverables</p>
+            <ul class="tags" role="list" aria-labelledby="deliverables">{tag_html}</ul>
           </div>
         </div>
         <div class="facts reveal-stagger">
@@ -157,19 +158,19 @@ def build(slug):
         <div class="container body-grid">
 {rail}
           <div class="chapters">
-            <article class="chapter" id="brief" data-chapter>
+            <section class="chapter" id="brief" data-chapter aria-labelledby="brief-title">
               <p class="ch-num"><b>01</b><span>Brief</span></p>
-              <h2 class="ch-title reveal">{heading}</h2>
+              <h2 class="ch-title reveal" id="brief-title">{heading}</h2>
               <p class="ch-text reveal">{brief}</p>
-            </article>
-            <article class="chapter" id="challenge" data-chapter>
-              <p class="ch-num"><b>02</b><span>Challenge</span></p>
+            </section>
+            <section class="chapter" id="challenge" data-chapter aria-labelledby="challenge-title">
+              <h2 class="ch-num" id="challenge-title"><b>02</b><span>Challenge</span></h2>
               <p class="ch-lead reveal">{challenge}</p>
-            </article>
-            <article class="chapter" id="approach" data-chapter>
-              <p class="ch-num"><b>03</b><span>Approach</span></p>
+            </section>
+            <section class="chapter" id="approach" data-chapter aria-labelledby="approach-title">
+              <h2 class="ch-num" id="approach-title"><b>03</b><span>Approach</span></h2>
               <p class="ch-lead reveal">{approach}</p>
-            </article>
+            </section>
           </div>
         </div>
       </section>

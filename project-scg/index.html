@@ -109,13 +109,14 @@
           <p class="label">Case 07 / 08</p>
         </div>
         <div class="hero-grid">
-          <h1 class="hero-title" aria-label="Sydney Cricket Ground" style="--fit-d: 4.83; --fit-m: 8.3">
+          <h1 class="hero-title" aria-label="Sydney Cricket Ground" style="--fit-d: 7.14; --fit-m: 7.14">
           <span class="line"><span>Sydney</span></span>
           <span class="line"><span><em class="accent">Cricket Ground</em></span></span>
           </h1>
           <div class="hero-side">
             <p class="hero-sub">Digital fan experience for one of Australia's most iconic venues: match-day companion app with live stats, wayfinding, and in-seat ordering.</p>
-            <div class="tags" aria-label="Deliverables"><span class="tag">UI Design</span><span class="tag">App</span></div>
+            <p class="label" id="deliverables">Deliverables</p>
+            <ul class="tags" role="list" aria-labelledby="deliverables"><li class="tag">UI Design</li><li class="tag">App</li></ul>
           </div>
         </div>
         <div class="facts reveal-stagger">
@@ -130,7 +131,7 @@
 
       <section class="body" aria-label="Case study">
         <div class="container body-grid">
-        <aside class="rail" aria-label="Chapters">
+        <nav class="rail" aria-label="Chapters">
           <p class="label">Chapters</p>
           <ol>
             <li><a href="#brief" class="hoverable active"><span>01</span>Brief</a></li>
@@ -138,21 +139,21 @@
             <li><a href="#approach" class="hoverable"><span>03</span>Approach</a></li>
             <li><a href="#gallery" class="hoverable"><span>04</span>Gallery</a></li>
           </ol>
-        </aside>
+        </nav>
           <div class="chapters">
-            <article class="chapter" id="brief" data-chapter>
+            <section class="chapter" id="brief" data-chapter aria-labelledby="brief-title">
               <p class="ch-num"><b>01</b><span>Brief</span></p>
-              <h2 class="ch-title reveal">Elevating the <span class="accent">match day experience</span> at an iconic venue.</h2>
+              <h2 class="ch-title reveal" id="brief-title">Elevating the <span class="accent">match day experience</span> at an iconic venue.</h2>
               <p class="ch-text reveal">The Sydney Cricket Ground is more than a stadium: it's a 170-year-old institution and one of the most beloved sporting venues in the Southern Hemisphere. But the in-stadium fan experience hadn't evolved with the times. Fans were still relying on static signage, long queues, and guesswork to navigate their match day.</p>
-            </article>
-            <article class="chapter" id="challenge" data-chapter>
-              <p class="ch-num"><b>02</b><span>Challenge</span></p>
+            </section>
+            <section class="chapter" id="challenge" data-chapter aria-labelledby="challenge-title">
+              <h2 class="ch-num" id="challenge-title"><b>02</b><span>Challenge</span></h2>
               <p class="ch-lead reveal"><strong>The vision:</strong> create a companion app that transformed the SCG experience from arrival to final whistle, combining live match data with practical venue features like interactive wayfinding, in-seat food and drink ordering, and real-time queue indicators for facilities and concessions.</p>
-            </article>
-            <article class="chapter" id="approach" data-chapter>
-              <p class="ch-num"><b>03</b><span>Approach</span></p>
+            </section>
+            <section class="chapter" id="approach" data-chapter aria-labelledby="approach-title">
+              <h2 class="ch-num" id="approach-title"><b>03</b><span>Approach</span></h2>
               <p class="ch-lead reveal">I designed the full UI across all key flows, working with the venue's operations team to understand the physical environment and fan pain points. The design balanced rich sports content: live stats, ball-by-ball commentary, and player profiles, alongside the utility features that make a day at the ground effortless.</p>
-            </article>
+            </section>
           </div>
         </div>
       </section>
@@ -168,33 +169,33 @@
               <p class="g-hint"><span class="label">Scroll or hover to browse</span><span class="g-count" aria-hidden="true"><b>01</b><i> / 06</i></span></p>
             </div>
             <div class="acc">
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-1.webp" aria-expanded="false" aria-label="Image 01 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-1.webp" alt="Sydney Cricket Ground: Gallery 1" loading="eager" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-1.webp" data-alt="Sydney Cricket Ground: Gallery 1" aria-label="View image 01 of 06 full screen: Sydney Cricket Ground: Gallery 1">
+            <img src="../images/scg/gallery-1.webp" alt="" loading="eager" decoding="async" />
             <span class="acc-num" aria-hidden="true">(01)</span>
             <span class="acc-cap" aria-hidden="true"><b>(01)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-2.webp" aria-expanded="false" aria-label="Image 02 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-2.webp" alt="Sydney Cricket Ground: Gallery 2" loading="lazy" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-2.webp" data-alt="Sydney Cricket Ground: Gallery 2" aria-label="View image 02 of 06 full screen: Sydney Cricket Ground: Gallery 2">
+            <img src="../images/scg/gallery-2.webp" alt="" loading="lazy" decoding="async" />
             <span class="acc-num" aria-hidden="true">(02)</span>
             <span class="acc-cap" aria-hidden="true"><b>(02)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-3.webp" aria-expanded="false" aria-label="Image 03 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-3.webp" alt="Sydney Cricket Ground: Gallery 3" loading="lazy" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-3.webp" data-alt="Sydney Cricket Ground: Gallery 3" aria-label="View image 03 of 06 full screen: Sydney Cricket Ground: Gallery 3">
+            <img src="../images/scg/gallery-3.webp" alt="" loading="lazy" decoding="async" />
             <span class="acc-num" aria-hidden="true">(03)</span>
             <span class="acc-cap" aria-hidden="true"><b>(03)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-4.webp" aria-expanded="false" aria-label="Image 04 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-4.webp" alt="Sydney Cricket Ground: Gallery 4" loading="lazy" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-4.webp" data-alt="Sydney Cricket Ground: Gallery 4" aria-label="View image 04 of 06 full screen: Sydney Cricket Ground: Gallery 4">
+            <img src="../images/scg/gallery-4.webp" alt="" loading="lazy" decoding="async" />
             <span class="acc-num" aria-hidden="true">(04)</span>
             <span class="acc-cap" aria-hidden="true"><b>(04)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-5.webp" aria-expanded="false" aria-label="Image 05 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-5.webp" alt="Sydney Cricket Ground: Gallery 5" loading="lazy" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-5.webp" data-alt="Sydney Cricket Ground: Gallery 5" aria-label="View image 05 of 06 full screen: Sydney Cricket Ground: Gallery 5">
+            <img src="../images/scg/gallery-5.webp" alt="" loading="lazy" decoding="async" />
             <span class="acc-num" aria-hidden="true">(05)</span>
             <span class="acc-cap" aria-hidden="true"><b>(05)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
-          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-6.webp" aria-expanded="false" aria-label="Image 06 of 06. Select again to view full screen">
-            <img src="../images/scg/gallery-6.webp" alt="Sydney Cricket Ground: Gallery 6" loading="lazy" decoding="async" />
+          <button type="button" class="acc-panel hoverable" data-full="../images/scg/gallery-6.webp" data-alt="Sydney Cricket Ground: Gallery 6" aria-label="View image 06 of 06 full screen: Sydney Cricket Ground: Gallery 6">
+            <img src="../images/scg/gallery-6.webp" alt="" loading="lazy" decoding="async" />
             <span class="acc-num" aria-hidden="true">(06)</span>
             <span class="acc-cap" aria-hidden="true"><b>(06)</b>View full screen<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg></i></span>
           </button>
