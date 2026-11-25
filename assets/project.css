@@ -227,7 +227,7 @@ button { font-family: inherit; }
 
 /* ── Responsive ───────────────────────────────── */
 @media (max-width: 1024px) {
-  .hero-title { font-size: clamp(1.9rem, calc(var(--fit-m, 12) * 1vw), 8.5rem); }
+  .hero-title { font-size: clamp(1.45rem, calc(var(--fit-m, 12) * 1vw), 8.5rem); }
   .body-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
   .rail {
     top: 4.6rem; z-index: 50; margin: 0 calc(-1 * var(--gutter)); padding: 0.35rem var(--gutter);
